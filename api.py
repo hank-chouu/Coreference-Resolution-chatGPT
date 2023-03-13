@@ -41,9 +41,14 @@ for line in text_file:
 
     #使用json解析
     json = response.json()
-    output.append(json['choices'][0]['message']['content'])
-    print('Line completed. Time spent: {:.2f} s'.format(time.time() - start_time))
+    try:         
+        output.append(json['choices'][0]['message']['content'])
+        print('Line completed. Time spent: {:.2f} s'.format(time.time() - start_time))
+    except Exception as e:
+        print(f'Failed with {e.__class__}, response: {json}')
+        break
+         
 
-with open('output.txt', 'w') as f:
+with open('output.txt', 'w', encoding='utf-8') as f:
     for line in output:
 	    f.write(line + "\n")
