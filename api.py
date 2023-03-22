@@ -6,6 +6,9 @@ import time
 # config
 load_dotenv()
 api_key = os.getenv('OPENAI_API_KEY')
+N = os.getenv('N')
+if N is not None:
+    N = int(N)
 
 # preprocess
 with open('input.txt', 'r', encoding="utf-8") as f:
@@ -16,8 +19,12 @@ output = []
 # main program
 for line in text_file: 
 
+    if N is not None:
+        if len(line) > N:
+            continue
     start_time = time.time()
     messages = [
+        # teach chatgpt the right answer
         {"role": "system", "content": "請你辨識輸入的句子中的名詞及代名詞，並將代名詞轉換為對應的名詞後，輸出新的句子。"},
         {"role": "user", "content": "小明買了一碗飯，他接著又買了一碗湯。"},
         {"role": "assistant", "content": "小明買了一碗飯，小明接著又買了一碗湯。"},
